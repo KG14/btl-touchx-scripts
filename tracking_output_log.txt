@@ -1,0 +1,564 @@
+pybullet build time: Jan 29 2025 23:16:28
+Parent Directory:  /home/bridgemanlab/Desktop/TouchX
+startThreads creating 1 threads.
+starting thread 0
+started thread 0 
+argc=2
+argv[0] = --unused
+argv[1] = --start_demo_name=Physics Server
+ExampleBrowserThreadFunc started
+X11 functions dynamically loaded using dlopen/dlsym OK!
+X11 functions dynamically loaded using dlopen/dlsym OK!
+Creating context
+Created GL 3.3 context
+Direct GLX rendering context obtained
+Making context current
+GL_VENDOR=Mesa
+GL_RENDERER=NV136
+GL_VERSION=4.3 (Core Profile) Mesa 23.2.1-1ubuntu3.1~22.04.3
+GL_SHADING_LANGUAGE_VERSION=4.30
+pthread_getconcurrency()=0
+Version = 4.3 (Core Profile) Mesa 23.2.1-1ubuntu3.1~22.04.3
+Vendor = Mesa
+Renderer = NV136
+b3Printf: Selected demo: Physics Server
+startThreads creating 1 threads.
+starting thread 0
+started thread 0 
+MotionThreadFunc thread started
+ven = Mesa
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: ee_helper_link
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: ee_link
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: ee2_link
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: base
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: No inertial data for link, using mass=1, localinertiadiagonal = 1,1,1, identity local inertial frame
+b3Printf: b3Warning[examples/Importers/ImportURDFDemo/BulletUrdfImporter.cpp,126]:
+
+b3Printf: tool0
+ven = Mesa
+
+The robot has loaded! If you open the simulation window, you should see the robot in the window. You may see a few small cubes--that's expected, those are some placeholder links we put there for future use.
+
+Press ENTER to being tracking TouchX position updates.Initializing haptic device with name Default Device
+InitLogFile : (null)
+$GTDD_HOME not set. Using Default value : /home/bridgemanlab/.3dsystems
+: Success
+(/home/andy/repo/GeomagicTouchDeviceDrivers/PhantomManager/src/HIDManager.cpp,398) RELEASING Interface for 772 
+(/home/andy/repo/GeomagicTouchDeviceDrivers/PhantomManager/src/HIDManager.cpp,398) RELEASING Interface for 772 
+****************************************
+This is the DEVELOPER EDITION of OPENHAPTICS, commercial distribution is prohibited
+Please contact 3D Systems to obtain a commercial license
+****************************************
+Intialized device! 3D Systems Inc./Touch X High Speed
+Force feedback enabled!
+Reading positions from Touch X
+
+Set home position x=   0.00, y=   0.00, z=   0.00
+Waiting... press ENTER to begin following TouchX position
+IK solution is not accurate enough..11, z=   0.03
+IK solution is not accurate enough..11, z=   0.03
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..11, z=   0.04
+IK solution is not accurate enough..10, z=   0.04
+IK solution is not accurate enough..10, z=   0.04
+IK solution is not accurate enough..10, z=   0.04
+IK solution is not accurate enough..10, z=   0.04
+IK solution is not accurate enough..10, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..08, z=   0.04
+IK solution is not accurate enough..09, z=   0.04
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..11, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=  -0.00
+IK solution is not accurate enough..10, z=   0.00
+IK solution is not accurate enough..10, z=   0.00
+IK solution is not accurate enough..10, z=   0.00
+IK solution is not accurate enough..09, z=   0.00
+IK solution is not accurate enough..09, z=   0.00
+IK solution is not accurate enough..09, z=   0.00
+IK solution is not accurate enough..09, z=   0.00
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+Joint 2 value 3.1417926564280347 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.143107174604187 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.145124318975888 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1462921522042455 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1474794544673164 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1482580031039724 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1489206315453355 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1496026279342364 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1501683881834848 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1506071080979687 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+Joint 2 value 3.1509206518398383 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1512738372889326 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.151551333682311 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.151618380340389 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1515211888306105 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1513436618888093 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1510140009195973 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1503784390998333 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.149215212484543 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.1472919514967885 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+Joint 2 value 3.144598167867412 is out of limits [-3.14159265359, 3.14159265359]
+IK solution is outside joint limits.
+IK solution is not accurate enough.
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.01
+IK solution is not accurate enough..10, z=   0.01
+IK solution is not accurate enough..10, z=   0.01
+IK solution is not accurate enough..10, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..09, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.01
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.01
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..12, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..11, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..10, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..09, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..03, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..04, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..05, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..06, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..07, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.02
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..08, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..09, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+IK solution is not accurate enough..10, z=   0.03
+^C Position (mm): x=  -0.04, y=   0.08, z=  -0.06
+Stopping...
+That's it! Feel free to play around with any of this code to get familiar with it--it's all in simulation so nothing's going to break regardless. With the functions above, you should be able to do something simple, like get the robot to move in a straight line, or do the initial writing thing I mentioned on Tuesday. Not mandatory, but could be good to get familiar with the library! Press enter to close the simulation.

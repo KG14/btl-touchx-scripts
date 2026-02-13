@@ -56,13 +56,13 @@ A = np.array([ # Axes transform matrix
     [0, -1,  0],  # pb_z = - touch_y
 ], dtype=float)
 s = 0.001 # scale (TouchX mm -> PB meters)
-p_pb_home = np.array([0.4, 0.4, 0.4]) # PB home position
+p_pb_home = np.array([0, 0, 0]) # PB home position
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
 # Global variables
 p_touchx_home = np.zeros(3)
 p_touchx = np.zeros(3)
-client_id, robot, robot_id = None
+client_id, robot, robot_id = None, None, None
 startup = True
 
 # Function to convert TouchX position to PyBullet axes
@@ -100,22 +100,28 @@ def move_to_position(target_position):
     position_tolerance = 1e-3  
     orientation_tolerance = 1e-2  
     if position_error > position_tolerance or orientation_error > orientation_tolerance:
-        input("IK solution is not accurate enough. Press enter to continue...")
+        print("IK solution is not accurate enough.")
+        #time.sleep(0.5)
+        #input("IK solution is not accurate enough. Press enter to continue...")
     # ********************************************************************************************************************************************************************************************************
 
     # Once we have our joint positions from inverse kinematics, we simply repeat the process above to control the robot to those joints.
     current_joint_positions = robot.get_arm_joint_values() # Get the joint values of the robot in simulation currently
     joint_positions = np.array(ikJoints) # Set what we want the target robot joint values to be
-    interpolate_positions = np.linspace(current_joint_positions, joint_positions, 500) # Create 1000 intermediate joint values to move the robot smoothly
-    for i in interpolate_positions: 
-        robot.control_arm_joints(i) # Loop over all the intermediate positions and control the robot to that position
-        p.stepSimulation(physicsClientId=client_id) # Since this simulation is time-based, we need to take a step forward in time to make sure the simulation actually updates
-        time.sleep(1./240.)
+    
+    robot.control_arm_joints(joint_positions)
+    p.stepSimulation(physicsClientId=client_id)
+
+    #interpolate_positions = np.linspace(current_joint_positions, joint_positions, 5) # Create 1000 intermediate joint values to move the robot smoothly
+    #for i in interpolate_positions: 
+    #    robot.control_arm_joints(i) # Loop over all the intermediate positions and control the robot to that position
+    #    p.stepSimulation(physicsClientId=client_id) # Since this simulation is time-based, we need to take a step forward in time to make sure the simulation actually updates
+    #    time.sleep(1./240.)
     
 def main():
 
     #%% ------------------------------- Robot Loading and Vis. -------------------------------
-    global client_id, robot, robot_id
+    global client_id, robot, robot_id, startup
 
     # Create a simulation client/GUI, then set the proper gravity settings
     client_id = p.connect(p.GUI)
@@ -139,23 +145,25 @@ def main():
             # Read latest updated position from state
             x,y,z = device_state.position
             p_touchx = np.array([x, y, z])
-            print(f"Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
+            print(f"TX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
 
             # Store home position
             if startup:
                 p_touchx_home = p_touchx
                 print("Set home position")
-                startup = False
 
             # Calculate new position
             delta_pb = touchx_to_pb_pos(p_touchx)
             p_pb = p_pb_home + delta_pb
+            print(f"PB Position (mm): x={p_pb[0]:7.2f}, y={p_pb[1]:7.2f}, z={p_pb[2]:7.2f}", end="\r")
 
             # Move arm to new position
             move_to_position(p_pb)
-            input("Waiting... press ENTER to begin tracking following TouchX position")
+            if startup:
+                input("Waiting... press ENTER to begin following TouchX position")
+                startup = False
 
-            time.sleep(1)  # Thread runs at 1kHz but including delay
+            time.sleep(1./240.)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:
         print("\nStopping...")
     finally:

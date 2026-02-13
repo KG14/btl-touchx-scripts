@@ -255,7 +255,7 @@ class UR5Controller(object):
                 orientation_diff = p.getDifferenceQuaternion(actual_ee_orientation, ee_orientation)
                 w = np.clip(abs(orientation_diff[3]), 0.0, 1.0)  # Correct clamping
                 orientation_error = 2 * np.arccos(w)
-                print(f"Position error: {position_error}, Orientation error: {orientation_error}")
+                #print(f"Position error: {position_error}, Orientation error: {orientation_error}")
 
                 return position_error, orientation_error
             finally:
