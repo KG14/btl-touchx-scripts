@@ -252,9 +252,12 @@ class UR5Controller(object):
                 actual_ee_orientation = link_state.linkWorldOrientation
 
                 position_error = np.linalg.norm(np.array(actual_ee_position) - np.array(wp))
-                orientation_diff = p.getDifferenceQuaternion(actual_ee_orientation, ee_orientation)
-                w = np.clip(abs(orientation_diff[3]), 0.0, 1.0)  # Correct clamping
-                orientation_error = 2 * np.arccos(w)
+                orientation_error = -1
+                if ee_orientation is not None:
+                    orientation_diff = p.getDifferenceQuaternion(actual_ee_orientation, ee_orientation)
+                    w = np.clip(abs(orientation_diff[3]), 0.0, 1.0)  # Correct clamping
+                    orientation_error = 2 * np.arccos(w)
+                
                 #print(f"Position error: {position_error}, Orientation error: {orientation_error}")
 
                 return position_error, orientation_error

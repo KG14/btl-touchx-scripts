@@ -74,10 +74,19 @@ def touchx_to_pb_pos(p):
 def move_to_position(target_position):
     global client_id, robot, robot_id
 
+    '''
     ikJoints = p.calculateInverseKinematics(robot.id,
                                             8,
                                             target_position,
                                             target_orientation,
+                                            maxNumIterations=2000,
+                                            residualThreshold=1e-5,
+                                            physicsClientId=client_id)
+    '''
+    
+    ikJoints = p.calculateInverseKinematics(robot.id,
+                                            8, # end-effector index
+                                            targetPosition=target_position,
                                             maxNumIterations=2000,
                                             residualThreshold=1e-5,
                                             physicsClientId=client_id)
@@ -99,7 +108,7 @@ def move_to_position(target_position):
     position_error, orientation_error = robot.check_position_feasibility(ikJoints, target_position, target_orientation, 8)
     position_tolerance = 1e-3  
     orientation_tolerance = 1e-2  
-    if position_error > position_tolerance or orientation_error > orientation_tolerance:
+    if position_error > position_tolerance: # or orientation_error > orientation_tolerance:
         print("IK solution is not accurate enough.")
         #time.sleep(0.5)
         #input("IK solution is not accurate enough. Press enter to continue...")
@@ -172,21 +181,5 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-#%% ------------------------------- Inverse Kinematics and Cartesian Commands -------------------------------
-    
-
-
-target_position = np.array([0.4, 0.4, 0.4]) # Target XYZ position in meters
-target_orientation = np.array([0, 0, 0, 1]) # Target rotation orientation, expressed as a quaternion in x, y, z, w format. You don't need to know what this means (though the textbook should explain it too), but feel free to mess around with this if you'd like to see
-
-# This is the main function--this will take in some info about your target position + rotation, and spit out a set of joint angles you can give to the robot
-
-
-
-    
-# --------------------------------- END ------------------------------------
-    
-input("That's it! Feel free to play around with any of this code to get familiar with it--it's all in simulation so nothing's going to break regardless. With the functions above, you should be able to do something simple, like get the robot to move in a straight line, or do the initial writing thing I mentioned on Tuesday. Not mandatory, but could be good to get familiar with the library! Press enter to close the simulation.")
 
 p.disconnect(client_id)
