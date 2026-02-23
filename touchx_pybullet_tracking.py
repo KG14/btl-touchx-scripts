@@ -60,8 +60,9 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
 # Global variables
-p_touchx_home = np.zeros(3)
-p_touchx = np.zeros(3)
+p_touchx_home = np.zeros(3) # TouchX starting position 
+current_p_touchx = np.zeros(3) # Current TouchX position; continuously updated
+current_p_sim = np.zeros(3) # Current PyBullet sim position; continuously updated
 client_id, robot, robot_id = None, None, None
 startup = True
 
@@ -70,20 +71,14 @@ def touchx_to_pb_pos(p):
     global p_touchx_home
     return s * (A @ (p - p_touchx_home))
 
+# Function to find change in position & convert to PyBullet sim axes
+def findPositionDelta(current, new):
+    return s * (A @ (new - current))
+
 # Function to move arm to a given position (x,y,z) and orientation (quaternion)
 def move_to_position(target_position):
     global client_id, robot, robot_id
 
-    '''
-    ikJoints = p.calculateInverseKinematics(robot.id,
-                                            8,
-                                            target_position,
-                                            target_orientation,
-                                            maxNumIterations=2000,
-                                            residualThreshold=1e-5,
-                                            physicsClientId=client_id)
-    '''
-    
     ikJoints = p.calculateInverseKinematics(robot.id,
                                             8, # end-effector index
                                             targetPosition=target_position,
@@ -146,28 +141,29 @@ def main():
 
     #%% ------------------------------- Read TouchX updates -------------------------------
     device = HapticDevice(callback=device_callback, scheduler_type="async") # Initialize device and set callback
-    global p_touchx, p_touchx_home
+    global current_p_touchx, p_touchx_home
 
     try:
         print("Reading positions from Touch X\n")
         while True:
             # Read latest updated position from state
             x,y,z = device_state.position
-            p_touchx = np.array([x, y, z])
+            current_p_touchx = np.array([x, y, z])
             print(f"TX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
 
             # Store home position
             if startup:
-                p_touchx_home = p_touchx
+                p_touchx_home = current_p_touchx
                 print("Set home position")
 
-            # Calculate new position
-            delta_pb = touchx_to_pb_pos(p_touchx)
-            p_pb = p_pb_home + delta_pb
-            print(f"PB Position (mm): x={p_pb[0]:7.2f}, y={p_pb[1]:7.2f}, z={p_pb[2]:7.2f}", end="\r")
+            # Calculate new sim position
+            sim_delta = findPositionDelta()
+            new_p_sim = current_p_sim + sim_delta
+            print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
 
             # Move arm to new position
-            move_to_position(p_pb)
+            current_p_sim = new_p_sim
+            move_to_position(new_p_sim)
             if startup:
                 input("Waiting... press ENTER to begin following TouchX position")
                 startup = False
