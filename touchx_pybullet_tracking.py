@@ -50,12 +50,18 @@ def load_ur_robot(robot_initial_pose=[[0., 0., 0.], [0., 0., 0., 1.]],
     return robot_id, urdf_filepath
 
 # Constants 
+'''
+Facing TouchX, assume world +y is towards you, +x is to your left, +z is upwards
+1) World +z (upwards) ~ TouchX -y 
+2) World +y (towards you) ~ TouchX +z
+3) World +x (to your left) ~ TouchX -x
+'''
 A = np.array([ # Axes transform matrix
-    [1,  0,  0],  # pb_x = + touch_x
+    [-1,  0,  0],  # pb_x = - touch_x
     [0,  0,  1],  # pb_y = + touch_z
     [0, -1,  0],  # pb_z = - touch_y
 ], dtype=float)
-s = 0.001 # scale (TouchX mm -> PB meters)
+s = 0.002 # scale (TouchX mm -> PB meters)
 p_pb_home = np.array([0, 0, 0]) # PB home position
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
@@ -133,7 +139,7 @@ def main():
     p.setGravity(0, 0, -9.81, physicsClientId=client_id)
 
     # Load robot into simulation
-    robot_id, urdf_path = load_ur_robot(robot_initial_pose=[[0, 0, 0], [0, 0, 0, 1]], client_id=client_id, urdf_dir = "robots/urdf", urdf_file = "ur5e_fixed.urdf")
+    robot_id, urdf_path = load_ur_robot(robot_initial_pose=[[0, 0.4, 0], [0, 0, 0, 1]], client_id=client_id, urdf_dir = "robots/urdf", urdf_file = "ur5e_fixed.urdf")
     robot = UR5Controller(robot_id, rng=None, client_id=client_id)
 
     print("The robot has loaded! If you open the simulation window, you should see the robot in the window. You may see a few small cubes--that's expected, those are some placeholder links we put there for future use.\n")
@@ -141,32 +147,32 @@ def main():
 
     #%% ------------------------------- Read TouchX updates -------------------------------
     device = HapticDevice(callback=device_callback, scheduler_type="async") # Initialize device and set callback
-    global current_p_touchx, p_touchx_home
+    global current_p_touchx, current_p_sim, p_touchx_home
 
     try:
         print("Reading positions from Touch X\n")
         while True:
             # Read latest updated position from state
             x,y,z = device_state.position
-            current_p_touchx = np.array([x, y, z])
-            print(f"TX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
+            new_p_touchx = np.array([x, y, z])
+            print(f"TouchX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
 
-            # Store home position
+            # On first iteration, store home position for baseline and wait
             if startup:
-                p_touchx_home = current_p_touchx
-                print("Set home position")
-
-            # Calculate new sim position
-            sim_delta = findPositionDelta()
-            new_p_sim = current_p_sim + sim_delta
-            print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
-
-            # Move arm to new position
-            current_p_sim = new_p_sim
-            move_to_position(new_p_sim)
-            if startup:
+                p_touchx_home = new_p_touchx
+                current_p_touchx = p_touchx_home
+                print("Recorded home position: x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
                 input("Waiting... press ENTER to begin following TouchX position")
                 startup = False
+            else: # Calculate delta & update as usual
+                sim_delta = findPositionDelta(current_p_touchx, new_p_touchx)
+                new_p_sim = current_p_sim + sim_delta
+                print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
+
+                # Move arm to new position
+                current_p_touchx = new_p_touchx
+                current_p_sim = new_p_sim
+                move_to_position(new_p_sim)                
 
             time.sleep(1./240.)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:
