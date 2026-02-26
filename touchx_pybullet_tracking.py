@@ -29,7 +29,7 @@ def device_callback():
     # device = hd.get_current_device()
     transform = hd.get_transform()
     device_state.position = [transform[3][0], transform[3][1], transform[3][2]]
-    hd.set_force(*device_state.force)
+    #hd.set_force(device_state.force)
 
 '''
 ========= PyBullet Sim functions ==========
@@ -76,7 +76,7 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
-MAX_BOUNDARY_FORCE = 1.0
+MAX_BOUNDARY_FORCE = 0.01
 XMIN=0.15
 XMAX=0.30
 YMIN=-0.10
@@ -110,13 +110,17 @@ def findBoundaryForceFeedback(new):
 
     if (new[0] > XMAX):
         force_x = -MAX_BOUNDARY_FORCE
+        print("xmax exceeded")
     elif (new[0] < XMIN):
         force_x = MAX_BOUNDARY_FORCE
+        print("xmin exceeded")
 
     if (new[1] > YMAX):
         force_y = -MAX_BOUNDARY_FORCE
+        print("ymax exceeded")
     elif (new[1] < YMIN):
         force_y = MAX_BOUNDARY_FORCE
+        print("ymin exceeded")
 
     '''
     if (new[0] > ZMAX):
@@ -235,8 +239,8 @@ def main():
                 print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
 
                 # Boundary force feedback (PB axes -> TouchX axes); applied in device_callback
-                f_pb = findBoundaryForceFeedback(new_p_sim)
-                device_state.force = pb_force_to_touchx(f_pb)
+                #f_pb = findBoundaryForceFeedback(new_p_sim)
+                #device_state.force = pb_force_to_touchx(f_pb)
 
                 # Move arm to new position
                 current_p_touchx = new_p_touchx
