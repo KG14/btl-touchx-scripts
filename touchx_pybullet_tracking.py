@@ -73,6 +73,12 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
+MAX_BOUNDARY_FORCE = 1.0
+XMIN=0.15
+XMAX=0.30
+YMIN=-0.10
+YMAX=0.10
+
 # Global variables
 p_touchx_home = np.zeros(3) # TouchX starting position 
 current_p_touchx = np.zeros(3) # Current TouchX position; continuously updated
@@ -88,6 +94,31 @@ def touchx_to_pb_pos(p):
 # Function to find change in position & convert to PyBullet sim axes
 def findPositionDelta(current, new):
     return s * (A @ (new - current))
+
+def findBoundaryForceFeedback(new):
+    # Calculate x-axis penetration
+    force_x = 0
+    force_y = 0
+    force_z = 0
+
+    if (new[0] > XMAX):
+        force_x = -MAX_BOUNDARY_FORCE
+    elif (new[0] < XMIN):
+        force_x = MAX_BOUNDARY_FORCE
+
+    if (new[0] > YMAX):
+        force_y = -MAX_BOUNDARY_FORCE
+    elif (new[0] < YMIN):
+        force_y = MAX_BOUNDARY_FORCE
+
+    '''
+    if (new[0] > ZMAX):
+        force_z = -MAX_BOUNDARY_FORCE
+    elif (new[0] < ZMIN):
+        force_z = MAX_BOUNDARY_FORCE
+    '''
+
+    return [force_x, force_y, force_z]
 
 # Function to move arm to a given position (x,y,z) and orientation (quaternion)
 def move_to_position(target_position):
