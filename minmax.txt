@@ -1,0 +1,27 @@
+x: max = 206.58995056152344, min = -209.6981964111328
+y: max = 94.58108520507812, min = -146.45530700683594
+z: max = 125.13155364990234, min = -100.47034454345703
+
+x - left: -210 -> right 210
+y - down: 95 -> up: -101
+z - in: -145 -> out: 95
+
++y -> +green
+left x -> +red
+
+touch -x = pb +x (+red)
+touch +z = pb +y (+green)
+
+we want:
+out +y (touch +z) -> +red (+x)
+left x (touch -x) -> -green (-y)
+
+therefore, set
+touch x to pb y
+touch z to pb x
+touch y to pb -z
+
+to center:
+touchx x is the left-right axis; use center (0) as the base (y=0)
+touhchx z is the in-out axis; use center (-110) as the base (x=0)
+touchx y is the up-down axis; use table/touchx min height (95) as the base (z=0)
