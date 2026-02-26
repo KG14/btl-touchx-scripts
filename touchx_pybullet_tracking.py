@@ -181,7 +181,13 @@ def main():
                 
                 print(f"Moving robot to initial absolute position: x={initial_p_sim[0]:7.4f}, y={initial_p_sim[1]:7.4f}, z={initial_p_sim[2]:7.4f}")
                 move_to_position(current_p_sim)
-                
+                # Give the GUI time to redraw before we block on input().
+                # PyBullet updates the window when the main thread yields; without this
+                # the sim would only show the new pose after you press Enter.
+                for _ in range(10):
+                    p.stepSimulation(physicsClientId=client_id)
+                    time.sleep(1.0 / 240.0)
+
                 input("Robot positioned. Press ENTER to begin following TouchX position")
                 startup = False
             else: # Calculate delta & update as usual
