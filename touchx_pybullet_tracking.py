@@ -56,9 +56,16 @@ Facing TouchX, assume world +y is towards you, +x is to your left, +z is upwards
 2) World +y (towards you) ~ TouchX +z
 3) World +x (to your left) ~ TouchX -x
 '''
+'''
 A = np.array([ # Axes transform matrix
     [-1,  0,  0],  # pb_x = - touch_x
     [0,  0,  1],  # pb_y = + touch_z
+    [0, -1,  0],  # pb_z = - touch_y
+], dtype=float)
+'''
+A = np.array([ # Axes transform matrix
+    [0,  0,  1],  # pb_x = touch_z
+    [1,  0,  0],  # pb_y = + touch_x
     [0, -1,  0],  # pb_z = - touch_y
 ], dtype=float)
 s = 0.002 # scale (TouchX mm -> PB meters)

@@ -1,4 +1,5 @@
 import time
+import sys
 from dataclasses import dataclass
 
 import pyOpenHaptics.hd as hd
@@ -92,6 +93,12 @@ def device_callback():
 
 def main():
     device = HapticDevice(callback=device_callback, scheduler_type="async") # Initialize device and set callback
+    xmax = -sys.maxsize
+    xmin = sys.maxsize
+    ymax = -sys.maxsize
+    ymin = sys.maxsize
+    zmax = -sys.maxsize
+    zmin = sys.maxsize
 
     try:
         print("Reading positions from Touch X")
@@ -111,11 +118,20 @@ def main():
             status = " [BOUNDARY!]" if boundary_exceeded else ""
             '''
             #print(f"Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}{status}    ", end="\r")
+            if (x < xmin): xmin = x
+            if (x > xmax): xmax = x
+            if (y < ymin): ymin = y
+            if (y > ymax): ymax = y
+            if (z < zmin): zmin = z
+            if (z > zmax): zmax = z
             
             print(f"Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}    ", end="\r")
             time.sleep(0.02)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:
         print("\nStopping...")
+        print(f"x: max = {xmax}, min = {xmin}")
+        print(f"y: max = {ymax}, min = {ymin}")
+        print(f"x: max = {zmax}, min = {zmin}")
     finally:
         # Close device
         device.close()
