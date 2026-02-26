@@ -139,7 +139,7 @@ def move_to_position(target_position):
 def main():
 
     #%% ------------------------------- Robot Loading and Vis. -------------------------------
-    global client_id, robot, robot_id, startup
+    global client_id, robot, robot_id, startup, device_state
 
     # Create a simulation client/GUI, then set the proper gravity settings
     client_id = p.connect(p.GUI)
@@ -155,6 +155,9 @@ def main():
 
     #%% ------------------------------- Read TouchX updates -------------------------------
     device = HapticDevice(callback=device_callback, scheduler_type="async") # Initialize device and set callback
+    # Give the async servo thread time to run and populate device_state (servo @ 1kHz).
+    # Without this, the first read can happen before the callback has run, so we see (0,0,0).
+    time.sleep(0.15)
     global current_p_touchx, current_p_sim, p_touchx_home
 
     try:
