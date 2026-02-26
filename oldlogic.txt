@@ -1,0 +1,55 @@
+
+
+def findBoundaryForceFeedback(new):
+    # Calculate x-axis penetration
+    force_x = 0
+    force_y = 0
+    force_z = 0
+
+    if (new[0] > XMAX):
+        force_x = -MAX_BOUNDARY_FORCE
+    elif (new[0] < XMIN):
+        force_x = MAX_BOUNDARY_FORCE
+
+    if (new[1] > YMAX):
+        force_y = -MAX_BOUNDARY_FORCE
+    elif (new[1] < YMIN):
+        force_y = MAX_BOUNDARY_FORCE
+
+    '''
+    if (new[0] > ZMAX):
+        force_z = -MAX_BOUNDARY_FORCE
+    elif (new[0] < ZMIN):
+        force_z = MAX_BOUNDARY_FORCE
+    '''
+
+    return [force_x, force_y, force_z]
+
+
+
+sim_delta = findPositionDelta(current_p_touchx, new_p_touchx)
+                new_p_sim = current_p_sim + sim_delta
+                print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
+
+                # Boundary force feedback (PB axes -> TouchX axes); applied in device_callback
+                f_pb = findBoundaryForceFeedback(new_p_sim)
+                device_state.force = pb_force_to_touchx(f_pb)
+
+                # Move arm to new position
+                current_p_touchx = new_p_touchx
+                current_p_sim = new_p_sim
+                move_to_position(new_p_sim)                
+
+
+A_inv = A.T  # A is orthogonal; maps PB force -> TouchX force for haptic feedback
+
+
+MAX_BOUNDARY_FORCE = 1.0
+XMIN=0.15
+XMAX=0.30
+YMIN=-0.10
+YMAX=0.10
+def pb_force_to_touchx(f_pb):
+    """Convert force vector from PyBullet axes to TouchX axes for hd.set_force()."""
+    return tuple((A_inv @ np.asarray(f_pb)).tolist())
+
