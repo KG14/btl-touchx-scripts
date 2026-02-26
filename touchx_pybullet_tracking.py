@@ -70,6 +70,7 @@ A = np.array([ # Axes transform matrix
 ], dtype=float)
 s = 0.002 # scale (TouchX mm -> PB meters)
 p_pb_home = np.array([0, 0, 0]) # PB home position
+p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
 # Global variables
@@ -164,12 +165,21 @@ def main():
             new_p_touchx = np.array([x, y, z])
             print(f"TouchX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
 
-            # On first iteration, store home position for baseline and wait
+            # On first iteration, store home position and move to absolute starting position
             if startup:
                 p_touchx_home = new_p_touchx
                 current_p_touchx = p_touchx_home
-                print("Recorded home position: x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
-                input("Waiting... press ENTER to begin following TouchX position")
+                print(f"Recorded home position: x={x:7.2f}, y={y:7.2f}, z={z:7.2f}")
+                
+                # Calculate initial absolute position based on center reference
+                delta_from_center = p_touchx_home - p_touchx_center
+                initial_p_sim = s * (A @ delta_from_center)
+                current_p_sim = initial_p_sim
+                
+                print(f"Moving robot to initial absolute position: x={initial_p_sim[0]:7.4f}, y={initial_p_sim[1]:7.4f}, z={initial_p_sim[2]:7.4f}")
+                move_to_position(current_p_sim)
+                
+                input("Robot positioned. Press ENTER to begin following TouchX position")
                 startup = False
             else: # Calculate delta & update as usual
                 sim_delta = findPositionDelta(current_p_touchx, new_p_touchx)
