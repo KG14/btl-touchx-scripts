@@ -18,6 +18,7 @@ from pyOpenHaptics.hd_device import HapticDevice
 @dataclass
 class DeviceState:
     position: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    force: tuple[float, float, float] = (0.0, 0.0, 0.0)
 device_state = DeviceState() # Instantiate
 
 # Callback function; runs in servo thread 
@@ -27,7 +28,8 @@ def device_callback():
 
     # device = hd.get_current_device()
     transform = hd.get_transform()
-    device_state.position = [transform[3][0], -transform[3][1], transform[3][2]]
+    device_state.position = [transform[3][0], transform[3][1], transform[3][2]]
+    hd.set_force(*device_state.force)
 
 '''
 ========= PyBullet Sim functions ==========
@@ -65,9 +67,10 @@ A = np.array([ # Axes transform matrix
 '''
 A = np.array([ # Axes transform matrix
     [0,  0,  1],  # pb_x = touch_z
-    [1,  0,  0],  # pb_y = + touch_x
-    [0, -1,  0],  # pb_z = - touch_y
+    [1,  0,  0],  # pb_y = touch_x
+    [0, 1,  0],  # pb_z = touch_y
 ], dtype=float)
+A_inv = A.T  # A is orthogonal; maps PB force -> TouchX force for haptic feedback
 s = 0.002 # scale (TouchX mm -> PB meters)
 p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
@@ -95,6 +98,10 @@ def touchx_to_pb_pos(p):
 def findPositionDelta(current, new):
     return s * (A @ (new - current))
 
+def pb_force_to_touchx(f_pb):
+    """Convert force vector from PyBullet axes to TouchX axes for hd.set_force()."""
+    return tuple((A_inv @ np.asarray(f_pb)).tolist())
+
 def findBoundaryForceFeedback(new):
     # Calculate x-axis penetration
     force_x = 0
@@ -106,9 +113,9 @@ def findBoundaryForceFeedback(new):
     elif (new[0] < XMIN):
         force_x = MAX_BOUNDARY_FORCE
 
-    if (new[0] > YMAX):
+    if (new[1] > YMAX):
         force_y = -MAX_BOUNDARY_FORCE
-    elif (new[0] < YMIN):
+    elif (new[1] < YMIN):
         force_y = MAX_BOUNDARY_FORCE
 
     '''
@@ -219,12 +226,17 @@ def main():
                     p.stepSimulation(physicsClientId=client_id)
                     time.sleep(1.0 / 240.0)
 
+                device_state.force = (0.0, 0.0, 0.0)
                 input("Robot positioned. Press ENTER to begin following TouchX position")
                 startup = False
             else: # Calculate delta & update as usual
                 sim_delta = findPositionDelta(current_p_touchx, new_p_touchx)
                 new_p_sim = current_p_sim + sim_delta
                 print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
+
+                # Boundary force feedback (PB axes -> TouchX axes); applied in device_callback
+                f_pb = findBoundaryForceFeedback(new_p_sim)
+                device_state.force = pb_force_to_touchx(f_pb)
 
                 # Move arm to new position
                 current_p_touchx = new_p_touchx
