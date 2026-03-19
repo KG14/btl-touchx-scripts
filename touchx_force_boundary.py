@@ -7,7 +7,7 @@ from pyOpenHaptics.hd_device import HapticDevice
 
 # Force feedback parameters
 X_THRESHOLD = 80.0   # mm — force activates beyond this x value
-STIFFNESS = 0.3      # N/mm — spring gain
+STIFFNESS = 0.15      # N/mm — spring gain
 DAMPING = 0.002      # N·s/mm — velocity damping to prevent whipping
 MAX_FORCE = 2.0      # N — safety clamp
 SERVO_DT = 0.001     # s — servo loop runs at ~1kHz
