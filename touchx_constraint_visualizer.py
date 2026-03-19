@@ -17,36 +17,17 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-# ── TouchX hardware limits (mm), rounded values from minmax.txt ──────────
-TOUCHX_X_MIN, TOUCHX_X_MAX = -210, 210
-TOUCHX_Y_MIN, TOUCHX_Y_MAX = -100,  95
-TOUCHX_Z_MIN, TOUCHX_Z_MAX = -145,  95
-
-# ── Mapping constants (must match touchx_pybullet_tracking.py) ───────────
-A = np.array([
-    [0,  0,  1],   # pb_x = touch_z
-    [1,  0,  0],   # pb_y = touch_x
-    [0, -1,  0],   # pb_z = -touch_y
+# ── Default constants for standalone execution ───────────────────────────
+DEFAULT_TOUCHX_X_MIN, DEFAULT_TOUCHX_X_MAX = -210, 210
+DEFAULT_TOUCHX_Y_MIN, DEFAULT_TOUCHX_Y_MAX = -100, 95
+DEFAULT_TOUCHX_Z_MIN, DEFAULT_TOUCHX_Z_MAX = -145, 95
+DEFAULT_A = np.array([
+    [0, 0, 1],
+    [1, 0, 0],
+    [0, 1, 0],
 ], dtype=float)
-
-SCALE = 0.002                              # TouchX mm → PB meters
-TOUCHX_CENTER = np.array([0, 95, -110])    # TouchX ref that maps to PB origin
-
-
-def touchx_to_pb(tx_pos):
-    """Convert a TouchX position (mm) to PyBullet world coords (m)."""
-    return SCALE * (A @ (np.asarray(tx_pos, dtype=float) - TOUCHX_CENTER))
-
-
-# ── Compute full reachable PB bounding box ───────────────────────────────
-_corners_tx = np.array(list(itertools.product(
-    [TOUCHX_X_MIN, TOUCHX_X_MAX],
-    [TOUCHX_Y_MIN, TOUCHX_Y_MAX],
-    [TOUCHX_Z_MIN, TOUCHX_Z_MAX],
-)))
-_corners_pb = np.array([touchx_to_pb(c) for c in _corners_tx])
-PB_FULL_MIN = _corners_pb.min(axis=0)
-PB_FULL_MAX = _corners_pb.max(axis=0)
+DEFAULT_SCALE = 0.002
+DEFAULT_TOUCHX_CENTER = np.array([0, -60, -95], dtype=float)
 
 
 # ── 3-D box drawing helpers ──────────────────────────────────────────────
@@ -74,7 +55,32 @@ def _box_faces(verts):
 
 # ── GUI ──────────────────────────────────────────────────────────────────
 class ConstraintVisualizer:
-    def __init__(self):
+    def __init__(
+        self,
+        *,
+        touchx_limits=None,
+        A=None,
+        scale=None,
+        touchx_center=None,
+    ):
+        if touchx_limits is None:
+            touchx_limits = {
+                "x_min": DEFAULT_TOUCHX_X_MIN,
+                "x_max": DEFAULT_TOUCHX_X_MAX,
+                "y_min": DEFAULT_TOUCHX_Y_MIN,
+                "y_max": DEFAULT_TOUCHX_Y_MAX,
+                "z_min": DEFAULT_TOUCHX_Z_MIN,
+                "z_max": DEFAULT_TOUCHX_Z_MAX,
+            }
+        self.touchx_limits = touchx_limits
+        self.A = np.asarray(DEFAULT_A if A is None else A, dtype=float)
+        self.scale = float(DEFAULT_SCALE if scale is None else scale)
+        self.touchx_center = np.asarray(
+            DEFAULT_TOUCHX_CENTER if touchx_center is None else touchx_center,
+            dtype=float,
+        )
+        self.pb_full_min, self.pb_full_max = self._compute_pb_full_bounds()
+
         self.root = tk.Tk()
         self.root.title("PyBullet Workspace Constraint Visualizer")
         self.root.minsize(960, 640)
@@ -107,17 +113,17 @@ class ConstraintVisualizer:
 
             ttk.Label(frame, text="Min:").grid(row=0, column=0, sticky="e")
             mn = ttk.Entry(frame, width=12)
-            mn.insert(0, f"{PB_FULL_MIN[i]:.4f}")
+            mn.insert(0, f"{self.pb_full_min[i]:.4f}")
             mn.grid(row=0, column=1, padx=4, pady=2)
 
             ttk.Label(frame, text="Max:").grid(row=1, column=0, sticky="e")
             mx = ttk.Entry(frame, width=12)
-            mx.insert(0, f"{PB_FULL_MAX[i]:.4f}")
+            mx.insert(0, f"{self.pb_full_max[i]:.4f}")
             mx.grid(row=1, column=1, padx=4, pady=2)
 
             ttk.Label(
                 frame,
-                text=f"Full range: [{PB_FULL_MIN[i]:.4f}, {PB_FULL_MAX[i]:.4f}]",
+                text=f"Full range: [{self.pb_full_min[i]:.4f}, {self.pb_full_max[i]:.4f}]",
                 foreground="gray",
             ).grid(row=2, column=0, columnspan=2, sticky="w", pady=(2, 0))
 
@@ -146,19 +152,31 @@ class ConstraintVisualizer:
         self._update_plot()
 
     # ── helpers ──────────────────────────────────────────────────────────
+    def _touchx_to_pb(self, tx_pos):
+        return self.scale * (self.A @ (np.asarray(tx_pos, dtype=float) - self.touchx_center))
+
+    def _compute_pb_full_bounds(self):
+        corners_tx = np.array(list(itertools.product(
+            [self.touchx_limits["x_min"], self.touchx_limits["x_max"]],
+            [self.touchx_limits["y_min"], self.touchx_limits["y_max"]],
+            [self.touchx_limits["z_min"], self.touchx_limits["z_max"]],
+        )))
+        corners_pb = np.array([self._touchx_to_pb(corner) for corner in corners_tx])
+        return corners_pb.min(axis=0), corners_pb.max(axis=0)
+
     def _read_constraints(self):
         mins, maxs = [], []
         for i, axis in enumerate(["X", "Y", "Z"]):
             try:
                 lo = float(self.entries[f"{axis}_min"].get())
             except ValueError:
-                lo = PB_FULL_MIN[i]
+                lo = self.pb_full_min[i]
             try:
                 hi = float(self.entries[f"{axis}_max"].get())
             except ValueError:
-                hi = PB_FULL_MAX[i]
-            lo = max(lo, PB_FULL_MIN[i])
-            hi = min(hi, PB_FULL_MAX[i])
+                hi = self.pb_full_max[i]
+            lo = max(lo, self.pb_full_min[i])
+            hi = min(hi, self.pb_full_max[i])
             if lo > hi:
                 lo, hi = hi, lo
             mins.append(lo)
@@ -174,7 +192,7 @@ class ConstraintVisualizer:
             axis.pane.set_edgecolor("lightgray")
 
         # Full-range wireframe box
-        full_v = _box_verts(PB_FULL_MIN, PB_FULL_MAX)
+        full_v = _box_verts(self.pb_full_min, self.pb_full_max)
         self.ax.add_collection3d(Poly3DCollection(
             _box_faces(full_v),
             alpha=0.04, facecolor="skyblue",
@@ -201,9 +219,9 @@ class ConstraintVisualizer:
                         color="red", s=50, zorder=5, label="PB Origin")
 
         pad = 0.05
-        self.ax.set_xlim(PB_FULL_MIN[0] - pad, PB_FULL_MAX[0] + pad)
-        self.ax.set_ylim(PB_FULL_MIN[1] - pad, PB_FULL_MAX[1] + pad)
-        self.ax.set_zlim(PB_FULL_MIN[2] - pad, PB_FULL_MAX[2] + pad)
+        self.ax.set_xlim(self.pb_full_min[0] - pad, self.pb_full_max[0] + pad)
+        self.ax.set_ylim(self.pb_full_min[1] - pad, self.pb_full_max[1] + pad)
+        self.ax.set_zlim(self.pb_full_min[2] - pad, self.pb_full_max[2] + pad)
         self.ax.set_xlabel("PB X (m)")
         self.ax.set_ylabel("PB Y (m)")
         self.ax.set_zlabel("PB Z (m)")
@@ -227,19 +245,22 @@ class ConstraintVisualizer:
 
 
 def main():
-    print("TouchX → PyBullet coordinate mapping:")
-    print(f"  pb_x = scale * (touch_z - ({TOUCHX_CENTER[2]}))")
-    print(f"  pb_y = scale * (touch_x - ({TOUCHX_CENTER[0]}))")
-    print(f"  pb_z = scale * -(touch_y - ({TOUCHX_CENTER[1]}))")
-    print(f"  scale = {SCALE}")
+    viz = ConstraintVisualizer()
+    pb_full_min = viz.pb_full_min
+    pb_full_max = viz.pb_full_max
+    center = viz.touchx_center
+    print("TouchX → PyBullet coordinate mapping (defaults):")
+    print(f"  pb_x = scale * (touch_z - ({center[2]}))")
+    print(f"  pb_y = scale * (touch_x - ({center[0]}))")
+    print(f"  pb_z = scale * (touch_y - ({center[1]}))")
+    print(f"  scale = {viz.scale}")
     print()
     print("Full reachable PB bounding box (meters):")
-    print(f"  X: [{PB_FULL_MIN[0]:.4f}, {PB_FULL_MAX[0]:.4f}]")
-    print(f"  Y: [{PB_FULL_MIN[1]:.4f}, {PB_FULL_MAX[1]:.4f}]")
-    print(f"  Z: [{PB_FULL_MIN[2]:.4f}, {PB_FULL_MAX[2]:.4f}]")
+    print(f"  X: [{pb_full_min[0]:.4f}, {pb_full_max[0]:.4f}]")
+    print(f"  Y: [{pb_full_min[1]:.4f}, {pb_full_max[1]:.4f}]")
+    print(f"  Z: [{pb_full_min[2]:.4f}, {pb_full_max[2]:.4f}]")
     print()
 
-    viz = ConstraintVisualizer()
     result = viz.run()
 
     if result:

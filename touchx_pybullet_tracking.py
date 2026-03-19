@@ -81,6 +81,12 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, -60, -95]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
+# TouchX hardware min/max (mm) used to derive full reachable PB bounds in visualizer.
+# Update these if your measured device limits change.
+TOUCHX_X_MIN, TOUCHX_X_MAX = -210, 210
+TOUCHX_Y_MIN, TOUCHX_Y_MAX = -100, 95
+TOUCHX_Z_MIN, TOUCHX_Z_MAX = -145, 95
+
 # Web backend endpoint for PyBullet position updates
 WEB_SERVER_HOST = "127.0.0.1"
 WEB_SERVER_PORT = 8001
@@ -222,7 +228,16 @@ def main():
     global client_id, robot, robot_id, startup, device_state
     global XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX
 
-    viz = ConstraintVisualizer()
+    viz = ConstraintVisualizer(
+        touchx_limits={
+            "x_min": TOUCHX_X_MIN, "x_max": TOUCHX_X_MAX,
+            "y_min": TOUCHX_Y_MIN, "y_max": TOUCHX_Y_MAX,
+            "z_min": TOUCHX_Z_MIN, "z_max": TOUCHX_Z_MAX,
+        },
+        A=A,
+        scale=s,
+        touchx_center=p_touchx_center,
+    )
     constraints = viz.run()
     if constraints is None:
         print("No constraints set. Exiting.")
