@@ -1,6 +1,5 @@
 from fastapi import FastAPI
 from fastapi.websockets import WebSocket
-from fastapi.websockets import ConnectionClosed
 import json
 import uvicorn
 
@@ -31,8 +30,6 @@ async def websocket_endpoint(ws: WebSocket):
             data = await ws.receive_text()
             if data == "connect": 
                 print("Client connected")
-    except ConnectionClosed:
-        manager.disconnect(ws)
     except Exception as e:
         print(f"Error: {e}")
         manager.disconnect(ws)
@@ -41,6 +38,3 @@ async def websocket_endpoint(ws: WebSocket):
 @app.post("/position")
 async def update_position(position: dict):
     await manager.broadcast(json.dumps(position))
-
-# Start server from main.py to set default port
-if __name__ == "__main__": uvicorn.run("web.server.main:app", host="127.0.0.1", port=8001, reload=True)
