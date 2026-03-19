@@ -10,6 +10,7 @@ from dataclasses import dataclass
 import pyOpenHaptics.hd as hd
 from pyOpenHaptics.hd_callback import hd_callback
 from pyOpenHaptics.hd_device import HapticDevice
+from touchx_constraint_visualizer import ConstraintVisualizer
 
 '''
 ========= TouchX interface config ========
@@ -76,11 +77,16 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
-MAX_BOUNDARY_FORCE = 0.05
-XMIN=0.15
-XMAX=0.30
-YMIN=-0.10
-YMAX=0.10
+# Boundary force feedback (spring-damping, in PB units: meters, N/m, N·s/m)
+STIFFNESS = 75.0          # equivalent to 0.15 N/mm in TouchX space
+DAMPING = 1.0             # equivalent to 0.002 N·s/mm in TouchX space
+MAX_AXIS_FORCE = 2.0      # per-axis clamp (N)
+MAX_NET_FORCE = 3.0       # net magnitude clamp — prevents corner pile-up (N)
+
+# Workspace constraints — set interactively by the visualizer at startup
+XMIN, XMAX = 0.0, 0.0
+YMIN, YMAX = 0.0, 0.0
+ZMIN, ZMAX = 0.0, 0.0
 
 # Global variables
 p_touchx_home = np.zeros(3) # TouchX starting position 
@@ -98,30 +104,34 @@ def touchx_to_pb_pos(p):
 def findPositionDelta(current, new):
     return s * (A @ (new - current))
 
-def findBoundaryForceFeedback(new):
-    # Calculate x-axis penetration
-    force_x = 0
-    force_y = 0
-    force_z = 0
+def compute_boundary_force(pos, prev_pos, dt):
+    """Spring-damping force pushing back when pos exceeds constraint bounds.
 
-    if (new[0] > XMAX):
-        force_x = -MAX_BOUNDARY_FORCE
-    elif (new[0] < XMIN):
-        force_x = MAX_BOUNDARY_FORCE
+    Per-axis forces are clamped individually, then the net vector is clamped
+    to MAX_NET_FORCE so multi-axis penetration can't pile up excessively.
+    """
+    if dt <= 0:
+        return np.zeros(3)
 
-    if (new[1] > YMAX):
-        force_y = -MAX_BOUNDARY_FORCE
-    elif (new[1] < YMIN):
-        force_y = MAX_BOUNDARY_FORCE
+    vel = (pos - prev_pos) / dt
+    force = np.zeros(3)
+    bounds_min = np.array([XMIN, YMIN, ZMIN])
+    bounds_max = np.array([XMAX, YMAX, ZMAX])
 
-    '''
-    if (new[0] > ZMAX):
-        force_z = -MAX_BOUNDARY_FORCE
-    elif (new[0] < ZMIN):
-        force_z = MAX_BOUNDARY_FORCE
-    '''
+    for i in range(3):
+        if pos[i] < bounds_min[i]:
+            penetration = bounds_min[i] - pos[i]
+            force[i] = STIFFNESS * penetration - DAMPING * vel[i]
+        elif pos[i] > bounds_max[i]:
+            penetration = pos[i] - bounds_max[i]
+            force[i] = -STIFFNESS * penetration - DAMPING * vel[i]
+        force[i] = np.clip(force[i], -MAX_AXIS_FORCE, MAX_AXIS_FORCE)
 
-    return [force_x, force_y, force_z]
+    net = np.linalg.norm(force)
+    if net > MAX_NET_FORCE:
+        force *= MAX_NET_FORCE / net
+
+    return force
 
 def pb_force_to_touchx(f_pb):
     """Convert force vector from PyBullet axes to TouchX axes for hd.set_force()."""
@@ -176,8 +186,21 @@ def move_to_position(target_position):
     
 def main():
 
-    #%% ------------------------------- Robot Loading and Vis. -------------------------------
+    #%% ------------------------------- Set workspace constraints -------------------------------
     global client_id, robot, robot_id, startup, device_state
+    global XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX
+
+    viz = ConstraintVisualizer()
+    constraints = viz.run()
+    if constraints is None:
+        print("No constraints set. Exiting.")
+        return
+    XMIN, XMAX = constraints['x_min'], constraints['x_max']
+    YMIN, YMAX = constraints['y_min'], constraints['y_max']
+    ZMIN, ZMAX = constraints['z_min'], constraints['z_max']
+    print(f"Constraints: X=[{XMIN}, {XMAX}], Y=[{YMIN}, {YMAX}], Z=[{ZMIN}, {ZMAX}]\n")
+
+    #%% ------------------------------- Robot Loading and Vis. -------------------------------
 
     # Create a simulation client/GUI, then set the proper gravity settings
     client_id = p.connect(p.GUI)
@@ -197,6 +220,8 @@ def main():
     # Without this, the first read can happen before the callback has run, so we see (0,0,0).
     time.sleep(0.15)
     global current_p_touchx, current_p_sim, p_touchx_home
+    prev_p_sim = np.zeros(3)
+    prev_time = time.time()
 
     try:
         print("Reading positions from Touch X\n")
@@ -217,6 +242,9 @@ def main():
                 initial_p_sim = s * (A @ delta_from_center)
                 current_p_sim = initial_p_sim
                 
+                prev_p_sim = current_p_sim.copy()
+                prev_time = time.time()
+
                 print(f"Moving robot to initial absolute position: x={initial_p_sim[0]:7.4f}, y={initial_p_sim[1]:7.4f}, z={initial_p_sim[2]:7.4f}")
                 move_to_position(current_p_sim)
                 # Give the GUI time to redraw before we block on input().
@@ -231,18 +259,24 @@ def main():
             else: # Calculate delta & update as usual
                 sim_delta = findPositionDelta(current_p_touchx, new_p_touchx)
                 new_p_sim = current_p_sim + sim_delta
-                print(f"PB Position (mm): x={new_p_sim[0]:7.2f}, y={new_p_sim[1]:7.2f}, z={new_p_sim[2]:7.2f}", end="\r")
 
-                # Move arm to new position
                 current_p_touchx = new_p_touchx
                 current_p_sim = new_p_sim
-                move_to_position(new_p_sim)  
+                move_to_position(new_p_sim)
 
-                # Check bounds
-                pb_feedback = findBoundaryForceFeedback(new_p_sim)              
-                touchx_feedback = pb_force_to_touchx(pb_feedback)
-                print(f"[FB] pb feedback: ({pb_feedback[0]}, {pb_feedback[1]}, {pb_feedback[2]}), tx:  ({touchx_feedback[0]}, {touchx_feedback[1]}, {touchx_feedback[2]})")
-                # device_state.feedback_force = touchx_feedback
+                # Compute spring-damping boundary force feedback
+                now = time.time()
+                dt = now - prev_time
+                pb_force = compute_boundary_force(new_p_sim, prev_p_sim, dt)
+                touchx_force = pb_force_to_touchx(pb_force)
+                device_state.feedback_force = touchx_force
+                prev_p_sim = new_p_sim.copy()
+                prev_time = now
+
+                net_mag = np.linalg.norm(pb_force)
+                print(f"PB Pos: ({new_p_sim[0]:.3f},{new_p_sim[1]:.3f},{new_p_sim[2]:.3f}) | "
+                      f"Force: ({pb_force[0]:+.3f},{pb_force[1]:+.3f},{pb_force[2]:+.3f})N  net={net_mag:.3f}N",
+                      end="\r")
 
             time.sleep(1./240.)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:

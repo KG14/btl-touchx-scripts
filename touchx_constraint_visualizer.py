@@ -84,7 +84,7 @@ class ConstraintVisualizer:
         left = ttk.Frame(self.root)
         left.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-        self.fig = Figure(figsize=(7, 6), dpi=100)
+        self.fig = Figure(figsize=(7, 6), dpi=100, facecolor="white")
         self.ax = self.fig.add_subplot(111, projection="3d")
         self.canvas = FigureCanvasTkAgg(self.fig, master=left)
         self.canvas.get_tk_widget().pack(fill=tk.BOTH, expand=True)
@@ -167,6 +167,11 @@ class ConstraintVisualizer:
 
     def _update_plot(self):
         self.ax.cla()
+
+        # White pane backgrounds (reset after cla)
+        for axis in (self.ax.xaxis, self.ax.yaxis, self.ax.zaxis):
+            axis.pane.set_facecolor("white")
+            axis.pane.set_edgecolor("lightgray")
 
         # Full-range wireframe box
         full_v = _box_verts(PB_FULL_MIN, PB_FULL_MAX)
