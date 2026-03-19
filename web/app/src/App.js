@@ -203,18 +203,19 @@ function App() {
   );
   const axesSize = useMemo(() => Math.max(...PB_VIEW_MAX.map((v) => Math.abs(v))) + 0.1, []);
   const gridSize = useMemo(
-    () => Math.max(PB_VIEW_MAX[0] - PB_VIEW_MIN[0], PB_VIEW_MAX[2] - PB_VIEW_MIN[2]) + 0.5,
+    () => Math.max(PB_VIEW_MAX[0] - PB_VIEW_MIN[0], PB_VIEW_MAX[1] - PB_VIEW_MIN[1]) + 0.5,
     [],
   );
 
   return (
     <div className="app">
-      <Canvas camera={{ position: cameraPosition, fov: 50 }}>
+      <Canvas camera={{ position: cameraPosition, fov: 50, up: [0, 0, 1] }}>
         <color attach="background" args={['#ffffff']} />
         <ambientLight intensity={0.5} />
         <directionalLight position={[2, 2, 2]} intensity={1} />
         <Grid
-          position={[0, PB_VIEW_MIN[1], 0]}
+          position={[0, 0, PB_VIEW_MIN[2]]}
+          rotation={[Math.PI / 2, 0, 0]}
           args={[gridSize, gridSize]}
           cellSize={0.05}
           sectionSize={0.25}
