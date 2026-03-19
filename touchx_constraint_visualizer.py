@@ -17,10 +17,10 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolb
 from matplotlib.figure import Figure
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
-# ── TouchX hardware limits (mm) from minmax.txt ─────────────────────────
-TOUCHX_X_MIN, TOUCHX_X_MAX = -209.70, 206.59
-TOUCHX_Y_MIN, TOUCHX_Y_MAX = -146.46,  94.58
-TOUCHX_Z_MIN, TOUCHX_Z_MAX = -100.47, 125.13
+# ── TouchX hardware limits (mm), rounded values from minmax.txt ──────────
+TOUCHX_X_MIN, TOUCHX_X_MAX = -210, 210
+TOUCHX_Y_MIN, TOUCHX_Y_MAX = -101,  95
+TOUCHX_Z_MIN, TOUCHX_Z_MAX = -145,  95
 
 # ── Mapping constants (must match touchx_pybullet_tracking.py) ───────────
 A = np.array([
@@ -31,7 +31,6 @@ A = np.array([
 
 SCALE = 0.002                              # TouchX mm → PB meters
 TOUCHX_CENTER = np.array([0, 95, -110])    # TouchX ref that maps to PB origin
-ROBOT_BASE = np.array([0, 0.4, 0])         # robot basePosition in PB world
 
 
 def touchx_to_pb(tx_pos):
@@ -143,8 +142,6 @@ class ConstraintVisualizer:
                   foreground="darkorange").pack(anchor="w")
         ttk.Label(ctrl, text="Red dot = PB origin  (0,0,0)",
                   foreground="red").pack(anchor="w")
-        ttk.Label(ctrl, text="Green triangle = Robot base",
-                  foreground="green").pack(anchor="w")
 
         self._update_plot()
 
@@ -194,11 +191,9 @@ class ConstraintVisualizer:
                          f"({v[0]:.3f},{v[1]:.3f},{v[2]:.3f})",
                          fontsize=6, color="saddlebrown", alpha=0.7)
 
-        # Reference markers
+        # Origin marker
         self.ax.scatter(*[[0]], *[[0]], *[[0]],
                         color="red", s=50, zorder=5, label="PB Origin")
-        self.ax.scatter(*[[ROBOT_BASE[0]]], *[[ROBOT_BASE[1]]], *[[ROBOT_BASE[2]]],
-                        color="green", s=60, marker="^", zorder=5, label="Robot base")
 
         pad = 0.05
         self.ax.set_xlim(PB_FULL_MIN[0] - pad, PB_FULL_MAX[0] + pad)
