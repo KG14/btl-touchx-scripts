@@ -242,7 +242,7 @@ def main():
                 pb_feedback = findBoundaryForceFeedback(new_p_sim)              
                 touchx_feedback = pb_force_to_touchx(pb_feedback)
                 print(f"[FB] pb feedback: ({pb_feedback[0]}, {pb_feedback[1]}, {pb_feedback[2]}), tx:  ({touchx_feedback[0]}, {touchx_feedback[1]}, {touchx_feedback[2]})")
-                device_state.feedback_force = touchx_feedback
+                # device_state.feedback_force = touchx_feedback
 
             time.sleep(1./240.)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:
