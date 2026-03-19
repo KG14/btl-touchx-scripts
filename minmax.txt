@@ -21,7 +21,7 @@ touch x to pb y
 touch z to pb x
 touch y to pb -z
 
-to center:
+to orient absolutely:
 touchx x is the left-right axis; use center (0) as the base (y=0)
 touhchx z is the in-out axis; use center (-110) as the base (x=0)
 touchx y is the up-down axis; use table/touchx min height (95) as the base (z=0)
