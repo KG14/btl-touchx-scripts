@@ -1,0 +1,10 @@
+.app {
+  height: 80vh;
+  width: 100%;
+  background: #ffffff;
+}
+
+canvas {
+  display: block;
+  height: 100% !important;
+}

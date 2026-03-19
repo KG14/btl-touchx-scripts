@@ -4,6 +4,8 @@ import pybullet_data
 import pybullet_utils_cust as pu
 import os
 import time
+import json
+from urllib import request, error
 from UR5Controller import UR5Controller
 
 from dataclasses import dataclass
@@ -78,6 +80,12 @@ p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
+# Web backend endpoint for PyBullet position updates
+WEB_SERVER_HOST = "127.0.0.1"
+WEB_SERVER_PORT = 8001
+POSITION_UPDATE_PATH = "/position"
+POSITION_UPDATE_ENDPOINT = f"http://{WEB_SERVER_HOST}:{WEB_SERVER_PORT}{POSITION_UPDATE_PATH}"
+
 # Boundary force feedback (spring-damping, in PB units: meters, N/m, N·s/m)
 STIFFNESS = 75.0          # equivalent to 0.15 N/mm in TouchX space
 DAMPING = 1.0             # equivalent to 0.002 N·s/mm in TouchX space
@@ -95,6 +103,28 @@ current_p_touchx = np.zeros(3) # Current TouchX position; continuously updated
 current_p_sim = np.zeros(3) # Current PyBullet sim position; continuously updated
 client_id, robot, robot_id = None, None, None
 startup = True
+
+
+def post_position_update(pb_pos):
+    """Post current PyBullet position to FastAPI /position endpoint."""
+    payload = {
+        "x": float(pb_pos[0]),
+        "y": float(pb_pos[1]),
+        "z": float(pb_pos[2]),
+    }
+    data = json.dumps(payload).encode("utf-8")
+    req = request.Request(
+        POSITION_UPDATE_ENDPOINT,
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with request.urlopen(req, timeout=0.05):
+            pass
+    except (error.URLError, TimeoutError):
+        # Keep tracking loop real-time even if backend is unavailable.
+        pass
 
 # Function to convert TouchX position to PyBullet axes
 def touchx_to_pb_pos(p):
@@ -248,6 +278,7 @@ def main():
 
                 print(f"Moving robot to initial absolute position: x={initial_p_sim[0]:7.4f}, y={initial_p_sim[1]:7.4f}, z={initial_p_sim[2]:7.4f}")
                 move_to_position(current_p_sim)
+                post_position_update(current_p_sim)
                 # Give the GUI time to redraw before we block on input().
                 # PyBullet updates the window when the main thread yields; without this
                 # the sim would only show the new pose after you press Enter.
@@ -264,6 +295,7 @@ def main():
                 current_p_touchx = new_p_touchx
                 current_p_sim = new_p_sim
                 move_to_position(new_p_sim)
+                post_position_update(new_p_sim)
 
                 # Compute spring-damping boundary force feedback
                 now = time.time()
