@@ -18,6 +18,7 @@ from pyOpenHaptics.hd_device import HapticDevice
 @dataclass
 class DeviceState:
     position: tuple[float, float, float] = (0.0, 0.0, 0.0)
+    feedback_force: tuple[float, float, float] = (0.0, 0.0, 0.0)
 device_state = DeviceState() # Instantiate
 
 # Callback function; runs in servo thread 
@@ -28,6 +29,7 @@ def device_callback():
     # device = hd.get_current_device()
     transform = hd.get_transform()
     device_state.position = [transform[3][0], -transform[3][1], transform[3][2]]
+    hd.set_force(device_state.feedback_force)
 
 '''
 ========= PyBullet Sim functions ==========
@@ -68,10 +70,17 @@ A = np.array([ # Axes transform matrix
     [1,  0,  0],  # pb_y = + touch_x
     [0, -1,  0],  # pb_z = - touch_y
 ], dtype=float)
+A_inv = A.T
 s = 0.002 # scale (TouchX mm -> PB meters)
 p_pb_home = np.array([0, 0, 0]) # PB home position
 p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
+
+MAX_BOUNDARY_FORCE = 0.05
+XMIN=0.15
+XMAX=0.30
+YMIN=-0.10
+YMAX=0.10
 
 # Global variables
 p_touchx_home = np.zeros(3) # TouchX starting position 
@@ -88,6 +97,35 @@ def touchx_to_pb_pos(p):
 # Function to find change in position & convert to PyBullet sim axes
 def findPositionDelta(current, new):
     return s * (A @ (new - current))
+
+def findBoundaryForceFeedback(new):
+    # Calculate x-axis penetration
+    force_x = 0
+    force_y = 0
+    force_z = 0
+
+    if (new[0] > XMAX):
+        force_x = -MAX_BOUNDARY_FORCE
+    elif (new[0] < XMIN):
+        force_x = MAX_BOUNDARY_FORCE
+
+    if (new[1] > YMAX):
+        force_y = -MAX_BOUNDARY_FORCE
+    elif (new[1] < YMIN):
+        force_y = MAX_BOUNDARY_FORCE
+
+    '''
+    if (new[0] > ZMAX):
+        force_z = -MAX_BOUNDARY_FORCE
+    elif (new[0] < ZMIN):
+        force_z = MAX_BOUNDARY_FORCE
+    '''
+
+    return [force_x, force_y, force_z]
+
+def pb_force_to_touchx(f_pb):
+    """Convert force vector from PyBullet axes to TouchX axes for hd.set_force()."""
+    return tuple((A_inv @ np.asarray(f_pb)).tolist())
 
 # Function to move arm to a given position (x,y,z) and orientation (quaternion)
 def move_to_position(target_position):
@@ -198,7 +236,13 @@ def main():
                 # Move arm to new position
                 current_p_touchx = new_p_touchx
                 current_p_sim = new_p_sim
-                move_to_position(new_p_sim)                
+                move_to_position(new_p_sim)  
+
+                # Check bounds
+                pb_feedback = findBoundaryForceFeedback(new_p_sim)              
+                touchx_feedback = pb_force_to_touchx(pb_feedback)
+                print(f"[FB] pb feedback: ({pb_feedback[0]}, {pb_feedback[1]}, {pb_feedback[2]}), tx:  ({touchx_feedback[0]}, {touchx_feedback[1]}, {touchx_feedback[2]})")
+                device_state.feedback_force = touchx_feedback
 
             time.sleep(1./240.)  # Thread runs at 1kHz but including delay
     except KeyboardInterrupt:
