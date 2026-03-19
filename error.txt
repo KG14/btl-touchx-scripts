@@ -1,0 +1,90 @@
+Failed to compile.
+
+[eslint] Cannot read config file: /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-app/base.js
+Error: Cannot find module 'node:path'
+Require stack:
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/_patch-base.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/modern-module-resolution.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-app/base.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/cli-engine/cli-engine.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/eslint.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/index.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/api.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/getESLint.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/linter.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/index.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/config/webpack.config.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/scripts/start.js
+Referenced from: BaseConfig
+WARNING in ./node_modules/@mediapipe/tasks-vision/vision_bundle.mjs
+Module Warning (from ./node_modules/source-map-loader/dist/cjs.js):
+Failed to parse source map from '/home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@mediapipe/tasks-vision/vision_bundle_mjs.js.map' file: Error: ENOENT: no such file or directory, open '/home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@mediapipe/tasks-vision/vision_bundle_mjs.js.map'
+
+ERROR in [eslint] Cannot read config file: /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-app/base.js
+Error: Cannot find module 'node:path'
+Require stack:
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/_patch-base.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/modern-module-resolution.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-app/base.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/cli-engine/cli-engine.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/eslint.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/index.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/api.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/getESLint.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/linter.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/index.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/config/webpack.config.js
+- /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/scripts/start.js
+Referenced from: BaseConfig
+
+ERROR in   Error: Child compilation failed:
+  [eslint] Cannot read config file: /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-  app/base.js
+  Error: Cannot find module 'node:path'
+  Require stack:
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/_patch-base.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@rushstack/eslint-patch/lib-commonjs/modern-module-r  esolution.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-config-react-app/base.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/@eslint/eslintrc/dist/eslintrc.cjs
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/cli-engine/cli-engine.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/eslint.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/eslint/index.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint/lib/api.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/getESLint.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/linter.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/eslint-webpack-plugin/dist/index.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/config/webpack.config.js
+  - /home/bridgemanlab/Desktop/TouchX/btl-touchx-scripts/web/app/node_modules/react-scripts/scripts/start.js
+  Referenced from: BaseConfig
+  
+  - child-compiler.js:211 
+    [app]/[html-webpack-plugin]/lib/child-compiler.js:211:18
+  
+  - Compiler.js:648 finalCallback
+    [app]/[webpack]/lib/Compiler.js:648:5
+  
+  - Compiler.js:684 
+    [app]/[webpack]/lib/Compiler.js:684:11
+  
+  - Compiler.js:1379 
+    [app]/[webpack]/lib/Compiler.js:1379:17
+  
+  
+  - Hook.js:21 Hook.CALL_ASYNC_DELEGATE [as _callAsync]
+    [app]/[tapable]/lib/Hook.js:21:14
+  
+  - Compiler.js:1375 
+    [app]/[webpack]/lib/Compiler.js:1375:33
+  
+  - Compilation.js:3183 finalCallback
+    [app]/[webpack]/lib/Compilation.js:3183:11
+  
+  - Compilation.js:3521 
+    [app]/[webpack]/lib/Compilation.js:3521:11
+  
+  
+
+
+1 ERROR in child compilations (Use 'stats.children: true' resp. '--stats-children' for more details)
+webpack compiled with 3 errors and 1 warning
