@@ -19,7 +19,7 @@ from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 
 # ── TouchX hardware limits (mm), rounded values from minmax.txt ──────────
 TOUCHX_X_MIN, TOUCHX_X_MAX = -210, 210
-TOUCHX_Y_MIN, TOUCHX_Y_MAX = -101,  95
+TOUCHX_Y_MIN, TOUCHX_Y_MAX = -100,  95
 TOUCHX_Z_MIN, TOUCHX_Z_MAX = -145,  95
 
 # ── Mapping constants (must match touchx_pybullet_tracking.py) ───────────
