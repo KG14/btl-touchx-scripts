@@ -29,7 +29,8 @@ def device_callback():
 
     # device = hd.get_current_device()
     transform = hd.get_transform()
-    device_state.position = [transform[3][0], -transform[3][1], transform[3][2]]
+    # Keep raw TouchX axes here; A already handles pb_z = -touch_y.
+    device_state.position = [transform[3][0], transform[3][1], transform[3][2]]
     hd.set_force(device_state.feedback_force)
 
 '''
