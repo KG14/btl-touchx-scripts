@@ -33,7 +33,7 @@ def device_callback():
     transform = hd.get_transform()
     # Keep raw TouchX axes here; A already handles pb_z = -touch_y.
     device_state.position = [transform[3][0], transform[3][1], transform[3][2]]
-    hd.set_force(device_state.feedback_force)
+    #hd.set_force(device_state.feedback_force)
 
 '''
 ========= PyBullet Sim functions ==========
@@ -72,12 +72,13 @@ A = np.array([ # Axes transform matrix
 A = np.array([ # Axes transform matrix
     [0,  0,  1],  # pb_x = touch_z
     [1,  0,  0],  # pb_y = + touch_x
-    [0, -1,  0],  # pb_z = - touch_y
+    [0, 1,  0],  # pb_z = - touch_y
 ], dtype=float)
 A_inv = A.T
 s = 0.002 # scale (TouchX mm -> PB meters)
 p_pb_home = np.array([0, 0, 0]) # PB home position
-p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
+#p_touchx_center = np.array([0, 95, -110]) # TouchX center reference that maps to PB (0,0,0)
+p_touchx_center = np.array([0, -60, -95]) # TouchX center reference that maps to PB (0,0,0)
 target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for now
 
 # Web backend endpoint for PyBullet position updates
@@ -260,7 +261,7 @@ def main():
             # Read latest updated position from state
             x,y,z = device_state.position
             new_p_touchx = np.array([x, y, z])
-            print(f"TouchX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
+            #print(f"TouchX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f}", end="\r")
 
             # On first iteration, store home position and move to absolute starting position
             if startup:
@@ -285,7 +286,6 @@ def main():
                 for _ in range(10):
                     p.stepSimulation(physicsClientId=client_id)
                     time.sleep(1.0 / 240.0)
-
                 input("Robot positioned. Press ENTER to begin following TouchX position")
                 startup = False
             else: # Calculate delta & update as usual
@@ -307,7 +307,7 @@ def main():
                 prev_time = now
 
                 net_mag = np.linalg.norm(pb_force)
-                print(f"PB Pos: ({new_p_sim[0]:.3f},{new_p_sim[1]:.3f},{new_p_sim[2]:.3f}) | "
+                print(f"TouchX Position (mm): x={x:7.2f}, y={y:7.2f}, z={z:7.2f} | PB Pos: ({new_p_sim[0]:.3f},{new_p_sim[1]:.3f},{new_p_sim[2]:.3f}) | "
                       f"Force: ({pb_force[0]:+.3f},{pb_force[1]:+.3f},{pb_force[2]:+.3f})N  net={net_mag:.3f}N",
                       end="\r")
 

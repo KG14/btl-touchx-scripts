@@ -14,7 +14,7 @@ const TOUCHX_Z_MAX = 95;
 const A = [
   [0, 0, 1],   // pb_x = touch_z
   [1, 0, 0],   // pb_y = touch_x
-  [0, -1, 0],  // pb_z = -touch_y
+  [0, 1, 0],  // pb_z = -touch_y
 ];
 const SCALE = 0.002;
 const TOUCHX_CENTER = [0, 95, -110];
