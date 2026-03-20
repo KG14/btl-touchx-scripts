@@ -33,7 +33,7 @@ def device_callback():
     transform = hd.get_transform()
     # Keep raw TouchX axes here; A already handles pb_z = -touch_y.
     device_state.position = [transform[3][0], transform[3][1], transform[3][2]]
-    #hd.set_force(device_state.feedback_force)
+    hd.set_force(device_state.feedback_force)
 
 '''
 ========= PyBullet Sim functions ==========
@@ -84,7 +84,7 @@ target_orientation = np.array([0, 0, 0, 1]) # Constant target PB orientation for
 # TouchX hardware min/max (mm) used to derive full reachable PB bounds in visualizer.
 # Update these if your measured device limits change.
 TOUCHX_X_MIN, TOUCHX_X_MAX = -210, 210
-TOUCHX_Y_MIN, TOUCHX_Y_MAX = -100, 95
+TOUCHX_Y_MIN, TOUCHX_Y_MAX = -100, 150
 TOUCHX_Z_MIN, TOUCHX_Z_MAX = -145, 95
 
 # Web backend endpoint for PyBullet position updates
